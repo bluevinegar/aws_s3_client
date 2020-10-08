@@ -9,6 +9,7 @@ import 'bucket.dart';
 enum Provider {
   amazon,
   yandex,
+  digitalocean,
 }
 
 class Spaces extends Client {
@@ -32,10 +33,17 @@ class Spaces extends Client {
   Bucket bucket(String bucket) {
     switch (provider) {
       case Provider.amazon:
-        _endpointUrl = "https://s3.${region}.amazonaws.com";
+        if (region == null || region.isEmpty) {
+          _endpointUrl = "s3.amazonaws.com";
+        } else {
+          _endpointUrl = "s3.${region}.amazonaws.com";
+        }
+        break;
+      case Provider.digitalocean:
+        _endpointUrl = "${region}.digitaloceanspaces.com";
         break;
       case Provider.yandex:
-        _endpointUrl = "https://storage.yandexcloud.net";
+        _endpointUrl = "storage.yandexcloud.net";
         break;
       default:
         throw Exception(
@@ -45,7 +53,7 @@ class Spaces extends Client {
         region: region,
         accessKey: accessKey,
         secretKey: secretKey,
-        endpointUrl: "$_endpointUrl/${bucket}",
+        endpointUrl: "https://${bucket}.$_endpointUrl",
         sessionToken: sessionToken,
         httpClient: httpClient);
   }
