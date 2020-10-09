@@ -53,7 +53,7 @@ class Spaces extends Client {
         region: region,
         accessKey: accessKey,
         secretKey: secretKey,
-        endpointUrl: "https://${bucket}.$_endpointUrl",
+        endpointUrl: "https://$_endpointUrl/${bucket}",
         sessionToken: sessionToken,
         httpClient: httpClient);
   }
